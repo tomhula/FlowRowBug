@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -72,28 +74,39 @@ fun App(
         }
     }
 
-    Surface(
-        modifier = modifier.width(width),
-        tonalElevation = 2.dp,
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                repeat(10) {
-                    Element(it + 1)
-                }
-            }
+    var spacingEnabled by remember { mutableStateOf(true) }
 
-            VerticalDivider(
-                modifier = Modifier.fillMaxHeight(),
-                thickness = 2.dp,
-                color = Color.Blue
-            )
+    Column {
+        Surface(
+            modifier = modifier.width(width),
+            tonalElevation = 2.dp,
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                val spacing = if (spacingEnabled) 10.dp else 0.dp
+
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(spacing),
+                    verticalArrangement = Arrangement.spacedBy(spacing)
+                ) {
+                    repeat(10) {
+                        Element(it + 1)
+                    }
+                }
+
+                VerticalDivider(
+                    modifier = Modifier.fillMaxHeight(),
+                    thickness = 2.dp,
+                    color = Color.Blue
+                )
+            }
+        }
+
+        Row {
+            Switch(spacingEnabled, { spacingEnabled = !spacingEnabled })
+            Text("Toggle spacing")
         }
     }
 }
