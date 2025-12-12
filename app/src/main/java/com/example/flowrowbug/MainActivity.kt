@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -38,7 +39,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FlowRowBugTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
+                    App(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(
+fun App(
     modifier: Modifier = Modifier
 ) {
     val min = 100
@@ -73,20 +74,18 @@ fun Greeting(
 
     Surface(
         modifier = modifier.width(width),
-        tonalElevation = 1.dp,
-        shadowElevation = 1.dp,
+        tonalElevation = 2.dp,
     ) {
         Row(
-            modifier = Modifier.height(IntrinsicSize.Min)
+            modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Box(Modifier.weight(1f, true)) {
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    repeat(10) {
-                        Element(it + 1)
-                    }
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                repeat(10) {
+                    Element(it + 1)
                 }
             }
 
