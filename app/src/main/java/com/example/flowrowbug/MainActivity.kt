@@ -4,29 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,8 +51,8 @@ class MainActivity : ComponentActivity() {
 fun Greeting(
     modifier: Modifier = Modifier
 ) {
-    val min = 300
-    val max = 500
+    val min = 100
+    val max = 400
     var width by remember { mutableStateOf(min.dp) }
 
     LaunchedEffect(Unit) {
@@ -79,19 +71,30 @@ fun Greeting(
         }
     }
 
-    Container(
+    Surface(
         modifier = modifier.width(width),
-        rightColumnContent = {
-            Text("First measured element")
-        }
+        tonalElevation = 1.dp,
+        shadowElevation = 1.dp,
     ) {
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+        Row(
+            modifier = Modifier.height(IntrinsicSize.Min)
         ) {
-            repeat(10) {
-                Element(it + 1)
+            Box(Modifier.weight(1f, true)) {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    repeat(10) {
+                        Element(it + 1)
+                    }
+                }
             }
+
+            VerticalDivider(
+                modifier = Modifier.fillMaxHeight(),
+                thickness = 2.dp,
+                color = Color.Blue
+            )
         }
     }
 }
@@ -104,60 +107,5 @@ private fun Element(number: Int)
         contentAlignment = Alignment.Center
     ) {
         Text(number.toString())
-    }
-}
-
-@Composable
-private fun Container(
-    title: @Composable () -> Unit = {},
-    rightColumnVisible: Boolean = true,
-    rightColumnContent: @Composable ColumnScope.() -> Unit = {},
-    onRightColumnClick: (() -> Unit)? = null,
-    modifier: Modifier,
-    content: @Composable () -> Unit = {}
-)
-{
-    Surface(
-        modifier = modifier,
-        tonalElevation = 1.dp,
-        shadowElevation = 1.dp,
-        shape = RoundedCornerShape(12.dp)
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .height(IntrinsicSize.Min)
-                .padding(20.dp)
-        ) {
-            Column(Modifier.weight(1f, true)) {
-                title()
-                Spacer(Modifier.height(15.dp))
-                content()
-            }
-
-            if (rightColumnVisible)
-            {
-                VerticalDivider(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(horizontal = 10.dp),
-                    thickness = 2.dp,
-                    color = MaterialTheme.colorScheme.surfaceColorAtElevation(100.dp)
-                )
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .clickable(
-                            enabled = onRightColumnClick != null,
-                            onClick = { onRightColumnClick?.invoke() },
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ),
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    content = rightColumnContent
-                )
-            }
-        }
     }
 }
